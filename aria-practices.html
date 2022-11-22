@@ -53,22 +53,38 @@
 
   <section id="intro">
     <h2>Introduction</h2>
-    <p>This section is <em>informative.</em></p>
     <p>
-      WAI-ARIA Authoring Practices is a guide for understanding how to use
-      <cite><a href="https://www.w3.org/TR/wai-aria-1.2/">WAI-ARIA 1.2</a></cite> to create an accessible Rich Internet Application.
-      It provides guidance on the appropriate application of WAI-ARIA, describes recommended WAI-ARIA usage patterns, and explains concepts behind them.
+      The ARIA Authoring Practices Guide (APG) explains how to create accessible web experiences for users of assistive technologies and keyboard interfaces by developing web sites that properly convey accessibility semantics and implement common keyboard conventions.
+      It also provides guidance on some closely related topics, such as supporting operating system settings for high contrast and reduced motion.
     </p>
     <p>
-      Languages used to create rich and dynamic web sites, e.g., HTML, JavaScript, CSS, and SVG, do not natively include all the features required to make sites usable by people who use assistive technologies (AT) or who rely on keyboard navigation.
+      Accessibility semantics refer to the meaning of user interface elements that need to be conveyed to assistive technology users in order for those users to understand and use the elements.
+      For example, people who can visually perceive a search icon button understand the element can be activated to perform a search by the way it is styled and positioned.
+      To make that icon accessible to a screen reader user, one of the semantics that needs to be communicated is that the element represents an interactive button.
+      In addition, keyboard accessibility requires the button to be focusable, and keyboard conventions call for pressing <kbd>Enter</kbd> or <kbd>Space</kbd> to activate the button when it is focused.
+      The APG describes how to convey accessibility semantics and implement keyboard accessibility for many common design patterns, ranging from typical buttons and popup menus to complex tree grids.
+      It also explains essential practices related to these patterns, such as how to convey web page structure with ARIA landmark regions and effectively utilize the many ways of encoding accessible names.
+    </p>
+    <p>
+      The APG is organized into two major sections: patterns and practices.
+      Each pattern explains how to make a common user interface element, such as a button, menu, or dialog, accessible, and provides functional example implementations of the pattern.
+      The practices section gives in-depth explanation of how to satisfy a variety of accessibility needs that surface when making rich internet application experiences accessible.
+      For instance, the practices section on providing accessible names and descriptions gives detailed descriptions of seven different naming techniques as well as a table providing guidance for naming more than 80 types of elements.
+    </p>
+    <p>
+      The APG assumes basic understanding of web development, especially of HTML and CSS.
+      It may be particularly useful to designers and engineers who are working on site design systems and component libraries.
+      However, it is important to understand that the APG only covers a portion of what is needed to create accessible experiences.
+      To understand accessibility more broadly, it is advisable to start with the <a href="https://www.w3.org/WAI/fundamentals/">WAI Accessibility Fundamentals</a> and <a href="https://www.w3.org/WAI/design-develop/">WAI Overview of Design and Development</a>.
+    </p>
+    <p>
+      The accessibility semantics used in the APG patterns and described in APG practices are defined in the
+      <cite><a href="https://www.w3.org/TR/wai-aria-1.2/">WAI-ARIA 1.2 Specification</a></cite>.
+      That is, the ARIA specification standardizes the meaning of the attributes that describe elements and their states to assistive technologies, such as the meaning of <code>role="button"</code>.
+      These attributes and other features required to make sites usable by people who rely on assistive technologies or keyboard navigation are not natively included in the languages used to create web sites, such as HTML, JavaScript, CSS, and SVG.
       The W3C Web Accessibility Initiative's (WAI) Accessible Rich Internet Applications working group (ARIA WG) is addressing these deficiencies through several W3C standards efforts.
       The <a href="https://www.w3.org/WAI/intro/aria.php">WAI-ARIA Overview</a>
       provides additional background on WAI-ARIA, summarizes those efforts, and lists the other documents included in the WAI-ARIA suite.
-    </p>
-    <p>
-      After a brief <q>Read Me First</q> section, the guide begins with ARIA implementation patterns for common widgets that both enumerate expected behaviors and demonstrate those behaviors with working code.
-      The implementation patterns and examples refer to detailed explanations of supporting concepts in subsequent guidance sections.
-      The guidance sections cover more general topics such as use of ARIA landmarks, practices for keyboard interfaces, grid and table properties, and the effects of role <code>presentation</code>.
     </p>
   </section>
 
@@ -490,7 +506,7 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
         While a slide may contain any type of content, image carousels where each slide contains nothing more than a single image are common.
       </p>
       <p>
-        Ensuring all users can easily control and are not adversely effected by slide rotation is an essential aspect of making carousels accessible.
+        Ensuring all users can easily control and are not adversely affected by slide rotation is an essential aspect of making carousels accessible.
         For instance, the screen reader experience can be confusing and disorienting if slides that are not visible on screen are incorrectly hidden, e.g., displayed off-screen.
         Similarly, if slides rotate automatically and a screen reader user is not aware of the rotation, the user may read an element on slide one, execute the screen reader command for next element, and, instead of hearing the next element on slide one,  hear an element from slide 2 without any knowledge that the element just announced is from an entirely new context.
       </p>
@@ -2008,25 +2024,40 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
 
       <section class="notoc">
         <h4>Keyboard Interaction</h4>
+        <p>The following description of keyboard behaviors assumes:</p>
+        <ol>
+          <li>A horizontal <code>menubar</code> containing several <code>menuitem</code>, <code>menuitemradio</code>, or <code>menuitemcheckbox</code> elements.</li>
+          <li>Some <code>menuitem</code> elements in the <code>menubar</code> have child submenus that contain vertically arranged items.</li>
+          <li>Some of the <code>menuitem</code> elements in the submenus have child submenus with items that are also vertically arranged.</li>
+        </ol>
+        <p>When reading the following descriptions, also keep in mind that:</p>
+        <ol>
+          <li>Focusable elements, which may have role <code>menuitem</code>, <code>menuitemradio</code>, or <code>menuitemcheckbox</code>, are referred to as items.</li>
+          <li>If a behavior applies to only certain types of items, e.g., <code>menuitem</code> elements, the specific role name is used.</li>
+          <li>Submenus, also known as popup menus,  are elements with role <code>menu</code>.</li>
+          <li>Except where noted, menus opened from a menubutton behave the same as menus opened from a menubar.</li>
+        </ol>
         <p>
-          The following description of keyboard behaviors assumes:</p>
-          <ol>
-            <li>A horizontal <code>menubar</code> containing several <code>menuitem</code>, <code>menuitemradio</code>, or <code>menuitemcheckbox</code> elements.</li>
-            <li>Some <code>menuitem</code> elements in the <code>menubar</code> have child submenus that contain vertically arranged items.</li>
-            <li>Some of the <code>menuitem</code> elements in the submenus have child submenus with items that are also vertically arranged.</li>
-          </ol>
-          <p>When reading the following descriptions, also keep in mind that:</p>
-          <ol>
-            <li>Focusable elements, which may have role <code>menuitem</code>, <code>menuitemradio</code>, or <code>menuitemcheckbox</code>, are referred to as items.</li>
-            <li>If a behavior applies to only certain types of items, e.g., <code>menuitem</code> elements, the specific role name is used.</li>
-            <li>Submenus, also known as popup menus,  are elements with role <code>menu</code>.</li>
-            <li>Except where noted, menus opened from a menubutton behave the same as menus opened from a menubar.</li>
-          </ol>
+          When a <code>menu</code> opens, or when a <code>menubar</code> receives focus, keyboard focus is placed on the first item.
+          Because <code>menubar</code> and <code>menu</code> elements are composite widgets as described in <a href="#kbd_general_within"></a>,
+          <kbd>Tab</kbd> and <kbd>Shift + Tab</kbd> do not move focus among the items in the menu.
+          Instead, the keyboard commands described in this section enable users to move focus among the elements in a <code>menubar</code> or <code>menu</code>.
+        </p>
         <ul>
-          <li>
-            When a <code>menu</code> opens, or when a <code>menubar</code> receives focus,
-            keyboard focus is placed on the first item.
-            All items are focusable as described in <a href="#kbd_general_within"></a>.
+          <li><kbd>Tab</kbd> and <kbd>Shift + Tab</kbd>: 
+            <ul>
+              <li>Move  focus into a <code>menubar</code>:
+                <ul>
+                  <li>If focus is moving into the <code>menubar</code> for the first time, focus is set on the first <code>menuitem</code>.</li>
+                  <li>If the <code>menubar</code> has previously contained focus, focus is optionally set on the <code>menuitem</code> that last had focus. Otherwise, it is set on the first <code>menuitem</code> that is not disabled.</li>
+                </ul>
+              </li>
+              <li>When focus is on a <code>menuitem</code> in a <code>menu</code> or <code>menubar</code>, move focus out of the <code>menu</code> or <code>menubar</code>, and close all menus and submenus.</li>
+              <li>
+                Note that <kbd>Tab</kbd> and <kbd>Shift + Tab</kbd> do not move focus into a <code>menu</code>.
+                Unlike a <code>menubar</code>, a <code>menu</code> is not visually persistent, and authors are responsible for ensuring focus moves to an item inside of a <code>menu</code> when the <code>menu</code> opens.
+              </li>
+            </ul>
           </li>
           <li><kbd>Enter</kbd>:
             <ul>
@@ -2091,8 +2122,6 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
           <li><kbd>End</kbd>: If arrow key wrapping is not supported, moves focus to the last item in the current <code>menu</code> or <code>menubar</code>.</li>
           <li>Any key that corresponds to a printable character (Optional): Move focus to the next item in the current menu whose label begins with that printable character.</li>
           <li><kbd>Escape</kbd>: Close the menu that contains focus and return focus to the element or context, e.g., menu button or parent <code>menuitem</code>, from which the menu was opened.</li>
-          <li><kbd>Tab</kbd>: Moves focus to the next element in the tab sequence, and if the item that had focus is not in a <code>menubar</code>, closes its <code>menu</code> and all open parent <code>menu</code> containers.</li>
-          <li><kbd>Shift + Tab</kbd>: Moves focus to the previous element in the tab sequence, and if the item that had focus is not in a <code>menubar</code>, closes its <code>menu</code> and all open parent <code>menu</code> containers.</li>
         </ul>
         <ol class="note">
           <li>Disabled menu items are focusable but cannot be activated. </li>
@@ -2772,8 +2801,8 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
       <section class="notoc">
         <h4>Examples</h4>
         <ul>
-          <li><a href="examples/tabs/tabs-1/tabs.html">Tabs With Automatic Activation</a>: A tabs widget where tabs are automatically activated and their panel is displayed when they receive focus.</li>
-          <li><a href="examples/tabs/tabs-2/tabs.html">Tabs With Manual Activation</a>: A tabs widget where users activate a tab and display its panel by pressing <kbd>Space</kbd> or <kbd>Enter</kbd>.</li>
+          <li><a href="examples/tabs/tabs-automatic.html">Tabs With Automatic Activation</a>: A tabs widget where tabs are automatically activated and their panel is displayed when they receive focus.</li>
+          <li><a href="examples/tabs/tabs-manual.html">Tabs With Manual Activation</a>: A tabs widget where users activate a tab and display its panel by pressing <kbd>Space</kbd> or <kbd>Enter</kbd>.</li>
         </ul>
       </section>
 
@@ -2835,6 +2864,7 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
             </ol>
           </li>
           <li>If the tab list is horizontal, it does not listen for <kbd>Down Arrow</kbd> or <kbd>Up Arrow</kbd> so those keys can provide their normal browser scrolling functions even when focus is inside the tab list.</li>
+          <li>When the tabpanel does not contain any focusable elements or the first element with content is not focusable, the tabpanel should set <code>tabindex="0"</code> to include it in the tab sequence of the page.</li>
         </ol>
       </section>
       <section class="notoc">
@@ -2849,7 +2879,7 @@ Some JavaScript and CSS may not function correctly in Internet Explorer.
           </li>
           <li>Each element with role <code>tab</code> has the property <a href="#aria-controls" class="property-reference">aria-controls</a> referring to its associated <code>tabpanel</code> element.</li>
           <li>The active <code>tab</code> element has the state <a href="#aria-selected" class="state-reference">aria-selected</a> set to <code>true</code> and all other <code>tab</code> elements have it set to <code>false</code>.</li>
-          <li>Each element with role <code>tabpanel</code> has the property <a href="#aria-labelledby" class="property-reference">aria-labelledby</a> referring to its associated <code>tab</code> element. </li>
+          <li>Each element with role <code>tabpanel</code> has the property <a href="#aria-labelledby" class="property-reference">aria-labelledby</a> referring to its associated <code>tab</code> element.</li>
           <li>If a <code>tab</code> element has a popup menu, it has the property <a href="#aria-haspopup" class="property-reference">aria-haspopup</a> set to either <code>menu</code> or <code>true</code>. </li>
           <li>
             If the <code>tablist</code> element is vertically oriented, it has the property <a href="#aria-orientation" class="property-reference">aria-orientation</a> set to <code>vertical</code>.
@@ -4000,13 +4030,11 @@ However, most authors do not need such detailed understanding of the algorithms 
       </p>
     </section>
 
-    <section id="accessible_names">
-      <h3>Accessible Names</h3>
       <section id="naming_cardinal_rules">
-        <h4>Cardinal Rules of Naming</h4>
+        <h3>Cardinal Rules of Naming</h3>
 
         <section id="naming_rule_heed_warnings">
-          <h5>Rule 1: Heed Warnings and Test Thoroughly</h5>
+          <h4>Rule 1: Heed Warnings and Test Thoroughly</h4>
           <p>
             Several of the <a href="#naming_techniques">naming techniques</a> below include notes that warn against specific coding patterns that are either prohibited by the ARIA specification or fall into gray space that is not yet fully specified.
             Some of these prohibited or ambiguous patterns may appear logical and even yield desired names in some browsers.
@@ -4018,7 +4046,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_rule_visible_text">
-          <h5>Rule 2: Prefer Visible Text</h5>
+          <h4>Rule 2: Prefer Visible Text</h4>
           <p>
             When a user interface includes visible text that could be used to provide an appropriate accessible name, using the visible text for the accessible name simplifies maintenance, prevents bugs, and reduces language translation requirements.
             When names are generated from text that exists only in markup and is never displayed visually, there is a greater likelihood that accessible names will not be updated when the user interface design or content are changed.
@@ -4031,7 +4059,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_rule_native_techniques">
-          <h5>Rule 3: Prefer Native Techniques</h5>
+          <h4>Rule 3: Prefer Native Techniques</h4>
           <p>
             In HTML documents, whenever possible, rely on HTML naming techniques, such as the HTML <code>label</code> element for form elements  and <code>caption</code> element for tables.
             While less flexible, their simplicity and reliance on visible text help ensure robust accessible experiences.
@@ -4040,7 +4068,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_rule_avoid_fallback">
-          <h5>Rule 4: Avoid Browser Fallback</h5>
+          <h4>Rule 4: Avoid Browser Fallback</h4>
           <p>
             When authors do not specify an accessible name using an element or attribute that is intended for naming, browsers attempt to help assistive technology users by resorting to fallback methods for generating a name.
             For example, the HTML <code>title</code> and <code>placeholder</code> attributes are used as last resort sources of content for accessible names.
@@ -4049,7 +4077,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_rule_brief_names">
-        <h5>Rule 5: Compose Brief, Useful Names</h5>
+        <h4>Rule 5: Compose Brief, Useful Names</h4>
           <p>
             Similar to how visually crowded screens and ambiguous icons reduce usability, excessively long, insufficiently distinct, or unclear  accessible names can make a user interface very difficult, or even impossible, to use for someone who relies on a non-visual form of the user interface.
             In other words, for a web experience to be accessible, its accessible names must be effective.
@@ -4059,10 +4087,10 @@ However, most authors do not need such detailed understanding of the algorithms 
       </section>
 
       <section id="naming_techniques">
-        <h4>Naming Techniques</h4>
+        <h3>Naming Techniques</h3>
 
         <section id="naming_with_child_content">
-          <h5>Naming with Child Content</h5>
+          <h4>Naming with Child Content</h4>
           <p>
             Certain elements get their name from the content they contain.
             For example, the following link is named &quot;Home&quot;.
@@ -4118,7 +4146,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_aria-label">
-          <h5>Naming with a String Attribute Via <code>aria-label</code></h5>
+          <h4>Naming with a String Attribute Via <code>aria-label</code></h4>
           <p>
             The <a href="#aria-label" class="property-reference">aria-label</a> property enables authors to name an element with a string that is not visually rendered.
             For example, the name of the following button is &quot;Close&quot;.
@@ -4151,7 +4179,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_aria-labelledby">
-          <h5>Naming with Referenced Content Via <code>aria-labelledby</code></h5>
+          <h4>Naming with Referenced Content Via <code>aria-labelledby</code></h4>
           <p>
             The <a href="#aria-labelledby" class="property-reference">aria-labelledby property</a> enables authors to reference other elements on the page to define an accessible name.
             For example, the following switch is named by the text content of a previous sibling element.
@@ -4207,7 +4235,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_labels">
-          <h5>Naming Form Controls with the Label Element</h5>
+          <h4>Naming Form Controls with the Label Element</h4>
           <p>
             The HTML <code>label</code> element enables authors to identify content that serves as a label and associate it with a form control.
             When a <code>label</code> element is associated with a form control, browsers calculate an accessible name for the form control from the <code>label</code> content.
@@ -4237,7 +4265,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_legends">
-          <h5>Naming Fieldsets with the Legend Element</h5>
+          <h4>Naming Fieldsets with the Legend Element</h4>
           <p>
             The HTML <code>fieldset</code> element can be used to group form controls, and the <code>legend</code> element can be used to give the group a name.
             For example, a group of radio buttons can be grouped together in a <code>fieldset</code>, where the <code>legend</code> element labels the group for the radio buttons.
@@ -4271,7 +4299,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_captions">
-          <h5>Naming Tables and Figures with Captions</h5>
+          <h4>Naming Tables and Figures with Captions</h4>
           <p>
             The accessible name for HTML <code>table</code> and <code>figure</code> elements can be derived from a child <code>caption</code> or <code>figcaption</code> element, respectively.
             Tables and figures often have a caption to explain what they are about, how to read them, and sometimes giving them numbers used to refer to them in surrounding prose.
@@ -4327,7 +4355,7 @@ However, most authors do not need such detailed understanding of the algorithms 
         </section>
 
         <section id="naming_with_fallback">
-          <h5>Fallback Names Derived from Titles and Placeholders</h5>
+          <h4>Fallback Names Derived from Titles and Placeholders</h4>
           <p>
             When an accessible name is not provided using one of the primary techniques (e.g., the <code>aria-label</code> or <code>aria-labelledby</code> attributes), or native markup techniques (e.g., the HTML <code>label</code> element, or the <code>alt</code> attribute of the HTML <code>img</code> element), browsers calculate an accessible name from other attributes as a fallback mechanism.
             Because the attributes used in fallback name calculation are not intended for naming, they typically yield low quality accessible names that are not effective.
@@ -4362,7 +4390,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
       </section>
 
       <section id="naming_effectively">
-        <h4>Composing Effective and User-friendly Accessible Names</h4>
+        <h3>Composing Effective and User-friendly Accessible Names</h3>
         <p>
           For assistive technology users, especially screen reader users, the quality of accessible names is one of the most  significant contributors to usability.
           Names that do not provide enough information reduce users' effectiveness while names that are too long reduce efficiency.
@@ -4404,7 +4432,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
       </section>
 
       <section id="naming_role_guidance">
-        <h4><span id="naming_role_guidance_heading">Accessible Name Guidance by Role</span></h4>
+        <h3><span id="naming_role_guidance_heading">Accessible Name Guidance by Role</span></h3>
         <p>
           Certain elements always require a name, others may usually or sometimes require a name, and still others should never be named.
           The table below lists all ARIA roles and provides the following information for each :
@@ -5207,7 +5235,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
       </section>
 
       <section id="name_calculation">
-        <h4>Accessible name calculation</h4>
+        <h3>Accessible name calculation</h3>
         <p>
           User agents construct an accessible name string for an element by walking through a list of potential naming methods and using the first that generates a name.
           The algorithm they follow is defined in the <a href="" class="accname">accessible name specification</a>.
@@ -5302,7 +5330,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
 &lt;/ul&gt;</code></pre>
 
         <section id="name_calculation_non-recursive_ex">
-          <h5>Examples of non-recursive accessible name calculation</h5>
+          <h4>Examples of non-recursive accessible name calculation</h4>
           <p>Consider an <code>input</code> element that has no associated <code>label</code> element and only a <code>name</code> attribute and so does not have an accessible name (do not do this):</p>
           <pre><code>&lt;input name="code"&gt;</code></pre>
           <p>If there is a <code>placeholder</code> attribute, then it serves as a naming fallback mechanism (avoid doing this):</p>
@@ -5348,7 +5376,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
           </section>
 
           <section id="name_calculation_recursive_ex">
-            <h5>Examples of recursive accessible name calculation</h5>
+            <h4>Examples of recursive accessible name calculation</h4>
             <p>The accessible name calculation algorithm will be invoked recursively when necessary. An <code>aria-labelledby</code> reference causes the algorithm to be invoked recursively, and when computing an accessible name from content the algorithm is invoked recursively for each child node.</p>
 
             <p>In this example, the label for the button is computed by recursing into each child node, resulting in <q>Move to trash</q>.</p>
@@ -5365,14 +5393,11 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
 &lt;/div&gt;</code></pre>
         </section>
       </section>
-    </section>
 
-    <section id="accessible_descriptions">
-      <h3>Accessible Descriptions</h3>
       <section id="describing_techniques">
-        <h4>Describing Techniques</h4>
+        <h3>Describing Techniques</h3>
         <section id="describing_with_aria-describedby">
-          <h5>Describing by referencing content with <code>aria-describedby</code></h5>
+          <h4>Describing by referencing content with <code>aria-describedby</code></h4>
           <p>
             The <code>aria-describedby</code> property works similarly to the <code>aria-labelledby</code> property.
             For example, a button could be described by a sibling paragraph.
@@ -5404,7 +5429,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
         </section>
 
         <section id="describing_with_captions">
-          <h5>Describing Tables and Figures with Captions</h5>
+          <h4>Describing Tables and Figures with Captions</h4>
           <p>
             In HTML, if the <code>table</code> is named using <code>aria-label</code> or <code>aria-labelledby</code>, a child <code>caption</code> element becomes an accessible description.
             For example, a preceding heading might serve as an appropriate accessible name, and the <code>caption</code> element might contain a longer description.
@@ -5437,7 +5462,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
          </section>
 
         <section id="describing_with_title">
-          <h5>Descriptions Derived from Titles</h5>
+          <h4>Descriptions Derived from Titles</h4>
           <p>If an accessible description was not provided using the <code>aria-describedby</code> attribute or one of the primary host-language-specific attributes or elements (e.g., the <code>caption</code> element for <code>table</code>), then, for HTML, if the element has a <code>title</code> attribute, that is used as the accessible description.</p>
           <p>A visible description together with <code>aria-describedby</code> is generally recommended. If a description that is not visible is desired, then the <code>title</code> attribute can be used, for any HTML element that can have an accessible description.</p>
           <p>Note that the <code>title</code> attribute might not be accessible to some users, in particular sighted users not using a screen reader and not using a pointing device that supports hover (e.g., a mouse).</p>
@@ -5457,7 +5482,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
       </section>
 
       <section id="description_calculation">
-        <h4>Accessible description calculation</h4>
+        <h3>Accessible description calculation</h3>
         <p>
           Like the <a href="#name_calculation">accessible name calculation</a>, the accessible description calculation produces a text string.
         </p>
@@ -5490,7 +5515,6 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
           </li>
         </ol>
       </section>
-    </section>
   </section>
 
   <section id="keyboard">
@@ -5817,7 +5841,7 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
         <ol>
           <li>The element referenced as active is a DOM descendant of the focused referencing element.</li>
           <li>The focused referencing element has a value specified for the <a href="#aria-owns" class="property-reference">aria-owns</a> property that includes the ID of the element referenced as active.</li>
-          <li>The focused referencing element has role of <a href="#textbox" class="role-reference">textbox</a> and has <a href="#aria-controls" class="property-reference">aria-controls</a> property referring to an element with a role that supports aria-activedescendant and either:
+          <li>The focused referencing element has role of <a href="#combobox" class="role-reference">combobox</a>, <a href="#textbox" class="role-reference">textbox</a>, or <a href="#searchbox" class="role-reference">searchbox</a> and has <a href="#aria-controls" class="property-reference">aria-controls</a> property referring to an element with a role that supports aria-activedescendant and either:
             <ol>
               <li>The element referenced as active is a descendant of the controlled element.</li>
               <li>The controlled element has a value specified for the <a href="#aria-owns" class="property-reference">aria-owns</a> property that includes the ID of the element referenced as active.</li>
@@ -7166,12 +7190,69 @@ So, As advised by <a href="#naming_rule_avoid_fallback">Rule 4: Avoid Browser Fa
 
   <section id="change_log" class="appendix">
     <h2>Change History</h2>
-    <p>Change history is maintained in a separate version-specific branch.</p>
+    
+    <p>
+      APG 1.1 supported ARIA 1.1, and this version, APG 1.2, includes changes to support version 1.2 of the ARIA specification.
+      It also includes nearly 200 significant updates to improve the quality and breadth of content.
+      A <a href="https://github.com/w3c/aria-practices/wiki/Change-Log-for-November-2021-APG-1.2-Note-Release-1">detailed log of all changes</a> is available on the wiki of the w3c/aria-practices GitHub repository.
+      Highlights of major changes to support ARIA 1.2 as well as some of the improvements include the following.
+    </p>
+    <ul>
+      <li>Added section to provide guidance related to 38 document structure roles, 18 of which are new in ARIA 1.2.</li>
+      <li>Revised guidance for roles where naming requirements changed in ARIA 1.2. ARIA 1.2 prohibits names on some roles. ARIA 1.2 removed naming requirements from some other roles.</li>
+      <li>Added naming guidance for 18 roles that are new in ARIA 1.2.</li>
+      <li>Revised the combobox pattern and 4 combobox examples to reflect the ARIA 1.2 revisions to combobox.</li>
+      <li>Added example illustrating changes in ARIA 1.2 that enable creation of custom select-only comboboxes, which are similar to HTML select elements. This replaces the Collapsible Listbox example, which is now deprecated.</li>
+      <li>Revised the listbox pattern to specify how to utilize the new ARIA 1.2 support for named groups of options and Added a new listbox example to demonstrate the named option group feature.</li>
+      <li>Revised the editor menubar example to illustrate new ARIA 1.2 support for named groups of items in a menu.</li>
+      <li>Updated the listbox and tree patterns to reflect current browser processing of aria-selected and provided guidance regarding the use of aria-checked to communicate selection.</li>
+      <li>Added section providing guidance about properties used with range widgets, such as aria-valuemin and aria-valuemax.</li>
+      <li>Added a design pattern and example implementation of the meter role, which is new in ARIA 1.2</li>
+      <li>Added two examples that demonstrate how to create rating inputs, one based on slider and one based on radio group.</li>
+      <li>Added two other slider examples: a vertical temperature slider and a media seek slider.</li>
+      <li>Added a switch design pattern and three example implementations: one made from a div element, one based on HTML button, and one that uses HTML checkbox input.</li>
+      <li>Added a button example that illustrates use of the new ARIA 1.2 IDL interface.</li>
+      <li>Added a date picker example that illustrates choosing a date with a combobox.</li>
+      <li>Added another example of a disclosure navigation menu that demonstrates how to include top-level links.</li>
+      <li>Added example of a sortable table.</li>
+      <li>Changed all example pages to include a <q>Jump to</q> menu, a button to  open the example in CodePen, and added a prominently placed warning with guidance about testing before re-using example code.</li>
+      <li>Improved support for high contrast settings and added detailed documentation of high contrast support in many examples.</li>
+      <li>Improved support for touch-based screen readers in several examples, most notably in sliders.</li>
+      <li>Due to change in ARIA 1.2, removed Math role from list of roles that have presentational children.</li>
+      <li>Developed a <a href="https://github.com/w3c/aria-practices/wiki/Code-Guide#apg-coding-standards">comprehensive set of coding standards for HTML, CSS, and Javascript</a> for the APG and updated a significant portion of content to conform with the standards.</li>
+      <li>In response to feedback, fixed many documentation errors and functional bugs in examples.</li>
+    </ul>
+    <p>Comprehensive lists of closed issues included in APG 1.2 release 1 are tracked in the following GitHub milestones.</p>
+    <ul>
+      <li>
+        <a href="https://github.com/w3c/aria-practices/milestone/2?closed=1">APG 1.2 Release 1 Milestone</a>:
+        Github issues closed in the first publication of APG 1.2 as a W3C Note in November 2021.
+      </li>
+      <li>
+        <a href="https://github.com/w3c/aria-practices/milestone/10">APG 1.2 Working Draft 3 Milestone</a>:
+        Github issues closed in the third working draft of APG 1.2 published in November 2019.
+      </li>
+      <li>
+        <a href="https://github.com/w3c/aria-practices/milestone/7">APG 1.2 Working Draft 1 milestone</a>:
+        GitHub issues closed in the first working draft of APG 1.2 published on July 17, 2018.
+      </li>
+    </ul>
+    
   </section>
 
   <section id="acknowledgements" class="appendix">
     <h2>Acknowledgements</h2>
     <section>
+      <h3>Honorary Editor</h3>
+      <p>
+        This version of the ARIA Authoring Practices Guide is dedicated to the memory of Carolyn MacLeod whose contributions are visible  throughout the entire guide.
+        She was dedicated to all aspects of the work of the APG Task Force from writing code and suggesting editorial revisions to testing  examples with assistive technologies.
+      </p>
+      <ul>
+        <li>Carolyn MacLeod (IBM Canada)</li>
+      </ul>
+    </section>
+    <section> 
       <h3>Major Contributors to Version 1.1</h3>
       <p>
         While WAI-ARIA Authoring Practices 1.1 is the work of the entire Authoring Practices Task Force and also benefits from many people throughout the open source community who both contribute significant work and provide valuable feedback,

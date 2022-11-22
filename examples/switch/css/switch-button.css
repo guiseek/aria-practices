@@ -5,8 +5,10 @@ button[role="switch"] {
   border: 0 solid #005a9c;
   border-radius: 5px;
   width: 17em;
+  height: 3em;
   text-align: left;
   background-color: white;
+  color: black;
 }
 
 button[role="switch"] .label {
@@ -17,9 +19,13 @@ button[role="switch"] .label {
   margin: 0;
   width: 10em;
   vertical-align: middle;
+  color: black;
 }
 
 button[role="switch"] svg {
+  display: inline-block;
+  width: 36px;
+  height: 20px;
   forced-color-adjust: auto;
   position: relative;
   top: 4px;
@@ -28,13 +34,13 @@ button[role="switch"] svg {
 button[role="switch"] svg rect {
   fill-opacity: 0;
   stroke-width: 2;
-  stroke: currentColor;
+  stroke: currentcolor;
 }
 
 button[role="switch"] svg rect.off {
   display: block;
-  stroke: currentColor;
-  fill: currentColor;
+  stroke: currentcolor;
+  fill: currentcolor;
   fill-opacity: 1;
 }
 
@@ -49,13 +55,13 @@ button[role="switch"] svg rect.on {
 button[role="switch"][aria-checked="true"] svg rect.on {
   color: green;
   display: block;
-  stroke-color: currentColor;
-  fill: currentColor;
+  stroke-color: currentcolor;
+  fill: currentcolor;
   fill-opacity: 1;
 }
 
 button[role="switch"] span.off {
-  display: inline;
+  display: inline-block;
 }
 
 button[role="switch"] span.on {
@@ -67,7 +73,7 @@ button[role="switch"][aria-checked="true"] span.off {
 }
 
 button[role="switch"][aria-checked="true"] span.on {
-  display: inline;
+  display: inline-block;
 }
 
 button[role="switch"]:focus,
